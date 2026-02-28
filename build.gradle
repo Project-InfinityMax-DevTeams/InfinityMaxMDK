@@ -23,6 +23,7 @@ java {
 
 repositories {
     mavenCentral()
+    mavenlocal()
     maven { url 'https://maven.minecraftforge.net/' }
     maven { url 'https://maven.fabricmc.net/' }
 }
@@ -37,7 +38,7 @@ subprojects {
     dependencies {
         implementation 'org.joml:joml:1.10.5'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-        implementation "com.yuyuto:infinitymaxapi:${rootProject.prop('infinitymaxapi_version', '0.1.0')}"
+        implementation "com.yuyuto:infinitymaxapi:0.1.0"
     }
 
     def spJavaVer = rootProject.hasProperty('java_version') ? rootProject.property('java_version') : '17'
