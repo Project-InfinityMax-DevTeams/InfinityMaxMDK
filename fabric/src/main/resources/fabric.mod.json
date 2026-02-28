@@ -10,12 +10,11 @@
   "contact": {},
   "license": "MIT",
   "environment": "*",
-  "entrypoints": {
+  "depends": {"entrypoints": {
     "main": [
-      "com.yuyuto.infinitymaxmdk"
+      "com.example.examplemod.FabricInitializer"
     ]
   },
-  "depends": {
     "fabricloader": ">=0.15.0",
     "minecraft": ">=1.20",
     "fabric-api": "*"
