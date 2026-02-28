@@ -23,7 +23,7 @@ java {
 
 repositories {
     mavenCentral()
-    mavenlocal()
+    mavenLocal()
     maven { url 'https://maven.minecraftforge.net/' }
     maven { url 'https://maven.fabricmc.net/' }
 }
