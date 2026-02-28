@@ -78,9 +78,24 @@ public final class ModRegistrationDsl {
      * @param typeName 任意の種類名（例: "spell"）
      */
     public void custom(String typeName, String id, String implClass, Consumer<ElementSpec> spec) {
+        if (spec == null) {
+            throw new IllegalArgumentException("spec must not be null");
+        }
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("id must not be null or blank");
+        }
+        if (implClass == null || implClass.isBlank()) {
+            throw new IllegalArgumentException("implClass must not be null or blank");
+        }
+        if (typeName == null || typeName.isBlank()) {
+            throw new IllegalArgumentException("typeName must not be null or blank");
+        }
         ElementSpec elementSpec = new ElementSpec();
         elementSpec.implClass = implClass;
         spec.accept(elementSpec);
+        if (elementSpec.implClass == null || elementSpec.implClass.isBlank()) {
+            throw new IllegalArgumentException("implClass must not be null or blank after spec");
+        }
         elementSpec.put("customType", typeName);
         definitions.add(new GameElementDefinition(GameElementType.CUSTOM, id, elementSpec.implClass, elementSpec.properties));
     }
