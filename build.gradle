@@ -1,5 +1,4 @@
 // MDK用 Root Gradle
-import groovy.json.JsonOutput
 
 plugins {
     id 'java'
@@ -38,8 +37,7 @@ subprojects {
     dependencies {
         implementation 'org.joml:joml:1.10.5'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-        def infinitymaxapiVersion = rootProject.hasProperty('infinitymaxapi_version') ? rootProject.property('infinitymaxapi_version') : '0.1.0'
-        implementation "com.yuyuto:infinitymaxapi:${infinitymaxapiVersion}"
+        implementation "com.yuyuto:infinitymaxapi:${rootProject.prop('infinitymaxapi_version', '0.1.0')}"
     }
 
     def spJavaVer = rootProject.hasProperty('java_version') ? rootProject.property('java_version') : '17'
@@ -69,6 +67,9 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+
+import groovy.json.JsonOutput
+
 def registrationSkipHints = [
         client : 'DedicatedServer向けビルドではクライアント処理を登録しない',
         gui    : 'サーバー専用構成ではGUI登録を省略',
@@ -77,8 +78,6 @@ def registrationSkipHints = [
 
 tasks.register('generateRegistrationHintsJson') {
     def outDir = layout.buildDirectory.dir('generated/registration-hints')
-    inputs.property('modId', prop('mod_id', 'examplemod'))
-    inputs.property('hints', registrationSkipHints)
     outputs.dir(outDir)
     doLast {
         def dir = outDir.get().asFile
@@ -86,7 +85,7 @@ tasks.register('generateRegistrationHintsJson') {
         def file = new File(dir, 'registration-skip-hints.json')
         def payload = [
                 modId    : (prop('mod_id', 'examplemod')),
-                generated: project.version.toString(), // または固定値/プロジェクトのビルド時間
+                generated: new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX"),
                 skip     : registrationSkipHints
         ]
         file.text = JsonOutput.prettyPrint(JsonOutput.toJson(payload))

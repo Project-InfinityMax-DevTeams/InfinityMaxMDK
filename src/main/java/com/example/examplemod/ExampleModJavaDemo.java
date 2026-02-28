@@ -1,53 +1,41 @@
 package com.example.examplemod;
 
-import com.example.examplemod.bootstrap.ExampleModRegistrations;
-import com.example.examplemod.registration.ModRegistrationDsl;
-import com.example.examplemod.registration.RegistrationExecutor;
+import com.example.examplemod.customlogic.ModCommonLogic;
 import com.example.examplemod.system.ModSystem;
 import com.example.examplemod.system.ModSystemContext;
 import com.example.examplemod.system.SystemPipeline;
 
 /**
- * 初心者向けの統合デモです。
+ * Java側デモクラスです。
  * <p>
- * このクラスは以下を 1 か所で確認できます。
- * <ul>
- *     <li>ゲーム要素のDSL登録</li>
- *     <li>登録実行（置換ポイント明示）</li>
- *     <li>純JavaのMOD独自システム実行</li>
- * </ul>
+ * このクラスは「カスタムゲームロジック全般」をJavaで記述する方針に沿って、
+ * 純Javaシステムと補助ロジックの利用例を示します。
  */
 public final class ExampleModJavaDemo {
     private ExampleModJavaDemo() {
     }
 
     /**
-     * MOD初期化時に呼ぶ想定のエントリーポイント例です。
+     * 純Javaシステムの起動例です。
      */
-    public static void initializeMod() {
-        // 1) DSL定義を生成（文字列・数値を変更するだけで流用可能）
-        ModRegistrationDsl dsl = ExampleModRegistrations.createDsl();
-
-        // 2) 定義を登録（本番はRegistrationExecutor内部を各ローダーAPIへ置換）
-        new RegistrationExecutor().registerAll(dsl.definitions());
-
-        // 3) 純Javaの独自システムを起動
+    public static void runJavaSystems() {
         SystemPipeline pipeline = new SystemPipeline();
         pipeline.addSystem(new ExampleEnergySystem());
         pipeline.initialize();
-        System.out.println("[Demo] Pipeline initialized");
         pipeline.tick();
-        System.out.println("[Demo] Pipeline tick completed");
+
+        // Kotlin DSLから呼ぶメソッドと同じロジックをJava単体でも実行できます。
+        ModCommonLogic.onItemUse("local-java-demo-context");
     }
 
     /**
-     * 純Javaで実装された独自システム例です。
+     * 純Javaで記述されたエネルギーシステム例です。
      */
     public static final class ExampleEnergySystem implements ModSystem {
         /** {@inheritDoc} */
         @Override
         public void initialize(ModSystemContext context) {
-            // ここを変えると初期値を変更できます。
+            // ここを任意の数値に置換可能: 初期エネルギー
             context.put("energy", 100);
         }
 
@@ -56,8 +44,8 @@ public final class ExampleModJavaDemo {
         public void tick(ModSystemContext context) {
             Object raw = context.get("energy");
             int energy = raw instanceof Integer ? (Integer) raw : 0;
-            // ここを変えると毎tickの増減ロジックを変更できます。
-            context.put("energy", Math.max(0, energy - 1));
+            // ここを任意の数値に置換可能: 1tickあたりの減衰値
+            context.put("energy", energy - 1);
         }
     }
 }

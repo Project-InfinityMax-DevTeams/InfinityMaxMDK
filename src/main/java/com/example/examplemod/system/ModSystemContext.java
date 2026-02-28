@@ -28,24 +28,4 @@ public final class ModSystemContext {
     public Object get(String key) {
         return state.get(key);
     }
-
-    /**
-     * 型安全に値を取得します。
-     /**
-      * 型安全に値を取得します。
-      * `@param` key 任意キー
-      * `@param` type 期待する型
-      * `@return` 保存値（未設定時はnull、型不一致時もnull）
-      */
-     */
-    public <T> T get(String key, Class<T> type) {
-        Object value = state.get(key);
-        if (type.isInstance(value)) {
-            return type.cast(value);
-        }
-        return null;
-    }
-        }
-        return null;
-    }  
 }
