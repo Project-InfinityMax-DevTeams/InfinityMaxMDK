@@ -86,6 +86,9 @@ public final class ModRegistrationDsl {
     }
 
     private void add(GameElementType type, String id, String implClass, Consumer<ElementSpec> spec) {
+        if (spec == null) {
+            throw new IllegalArgumentException("spec must not be null");
+        }
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("id must not be null or blank");
         }
@@ -95,6 +98,9 @@ public final class ModRegistrationDsl {
         ElementSpec elementSpec = new ElementSpec();
         elementSpec.implClass = implClass;
         spec.accept(elementSpec);
+        if (elementSpec.implClass == null || elementSpec.implClass.isBlank()) {
+            throw new IllegalArgumentException("implClass must not be null or blank after spec");
+        }
         definitions.add(new GameElementDefinition(type, id, elementSpec.implClass, elementSpec.properties));
     }
 
