@@ -3,18 +3,17 @@ package com.example.examplemod.bootstrap;
 import com.example.examplemod.registration.ModRegistrationDsl;
 
 /**
- * このクラスを編集するだけで、MOD固有要素の登録内容を変更できます。
- * <p>
- * 重要: 初心者は「ダブルクォーテーション文字列」と「数値」だけ変更してください。
+ * @brief   このクラスを編集するだけで、MOD固有要素の登録内容を変更できます。 / Simply editing this class allows you to modify the registered contents of MOD-specific elements.
+ * @details 重要 / Important: 初心者は「ダブルクォーテーション文字列」と「数値」だけ変更してください。 / Beginners should only modify the “double-quoted strings” and “numbers”.
  */
 public final class ExampleModRegistrations {
     private ExampleModRegistrations() {
     }
 
     /**
-     * 要求仕様の全ゲーム要素を登録するサンプルを作成します。
+     * @brief 要求仕様の全ゲーム要素を登録するサンプルを作成します。 / Create a sample that registers all game elements specified in the requirements specification.
      *
-     * @return 登録DSL本体
+     * @return 登録DSL本体 / Main registration DSL
      */
     public static ModRegistrationDsl createDsl() {
         ModRegistrationDsl dsl = new ModRegistrationDsl();
@@ -73,7 +72,7 @@ public final class ExampleModRegistrations {
                 .set("output", "generated/resources")
                 .set("includeLang", true));
 
-        // === CUSTOM (DSLに無い要素の拡張) ===
+        // === CUSTOM (DSLに無い要素の拡張 / Extension of elements not present in DSL) ===
         dsl.custom("spell", "example_fire_spell", s -> s
                 .impl("com.example.examplemod.magic.ExampleFireSpell")
                 .set("mana", 30)
