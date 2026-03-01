@@ -28,7 +28,7 @@ repositories {
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'org.joml:joml:1.10.5'
-    implementation "com.yuyuto:infinitymaxapi:0.1.0"
+    implementation 'com.yuyuto:infinitymaxapi-common:1.0.0-SNAPSHOT'
 
 }
 
