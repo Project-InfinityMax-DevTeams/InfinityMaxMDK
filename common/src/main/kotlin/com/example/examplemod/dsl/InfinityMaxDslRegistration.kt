@@ -1,6 +1,7 @@
 package com.example.examplemod.dsl
 
 import com.example.examplemod.customlogic.ModCommonLogic
+import com.yuyuto.infinitymaxapi.api.libs.Phase
 import com.yuyuto.infinitymaxapi.api.libs.behavior
 import com.yuyuto.infinitymaxapi.api.libs.registry
 
@@ -57,7 +58,7 @@ object InfinityMaxDslRegistration {
                 phase = Phase.INTERACT
                 // ここを任意の数値に変更: 消費値
                 meta("power_cost", 20)
-                connector = ModCommonLogic::onBlockInteract
+                connector = BehaviorConnector { context -> ModCommonLogic.onBlockInteract(context) }
             }
 
             item("example_item") {
@@ -65,31 +66,31 @@ object InfinityMaxDslRegistration {
                 phase = Phase.USE
                 // ここを任意の数値に変更: クールダウン
                 meta("cooldown", 40)
-                connector = ModCommonLogic::onItemUse
+                connector = BehaviorConnector { context -> ModCommonLogic.ononItemUse(context) }
             }
 
             entity("example_entity") {
                 resourceId = "entities/example_entity"
                 phase = Phase.TICK
-                connector = ModCommonLogic::onEntityTick
+                connector = BehaviorConnector { context -> ModCommonLogic.onEntityTick(context) } 
             }
 
             keybind("open_example_gui") {
                 resourceId = "keybind/open_example_gui"
                 phase = Phase.PRESS
-                connector = ModCommonLogic::onClientKeyPress
+                connector = BehaviorConnector { connector -> ModCommonLogic.onClientKeyPress }
             }
 
             ui("example_screen") {
                 resourceId = "ui/example_screen"
                 phase = Phase.RENDER
-                connector = ModCommonLogic::onGuiRender
+                connector = BehaviorConnector { connector -> ModCommonLogic.onGuiRender }
             }
 
             packet<Any>("example_packet") {
                 resourceId = "network/example_packet"
                 phase = Phase.RECEIVE
-                connector = ModCommonLogic::onPacketReceived
+                connector = BehaviorConnector { connector -> ModCommonLogic.onPacketReceived }
             }
         }
     }
