@@ -16,6 +16,8 @@ dependencies {
 
     minecraft "net.minecraftforge:forge:${mc}-${fv}"
     implementation project(":common")
+    implementation "com.yuyuto:infinitymaxapi:0.1.0"
+
 }
 
 processResources {
