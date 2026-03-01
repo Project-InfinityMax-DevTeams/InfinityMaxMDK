@@ -2,19 +2,19 @@ plugins {
     id 'fabric-loom' version '1.5.6'
 }
 
-def prop = { String name, def defaultVal = null -> project.hasProperty(name) ? project.property(name) : defaultVal }
+def prop = { String name, def defaultVal = null ->
+    project.hasProperty(name) ? project.property(name) : defaultVal
+}
 
 dependencies {
     minecraft "com.mojang:minecraft:${prop('minecraft_version', '1.20.1')}"
     mappings "net.fabricmc:yarn:${prop('yarn_mappings', '1.20.1+build.3')}:v2"
     modImplementation "net.fabricmc:fabric-loader:${prop('fabric_loader_version', '0.15.6')}"
+
+    implementation project(":common")
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-    options.release = (project.hasProperty('java_version') ? project.property('java_version').toInteger() : 17)
-}
-
+// fabric.mod.json 展開
 processResources {
     inputs.property "version", prop('mod_version', '0.1.0')
     filesMatching('fabric.mod.json') {
@@ -30,24 +30,19 @@ processResources {
     }
 }
 
+// Jar 出力設定
 jar {
-    def id = prop('mod_id', 'infinitymaxmdk')
-    def ver = prop('mod_version', '0.1.0')
-    archiveBaseName.set(id + "-fabric")
-    archiveVersion.set(ver)
+    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-fabric")
+    archiveVersion.set(prop('mod_version', '0.1.0'))
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-sourceSets {
-    main{
-        resources {
-            srcDir "../src/main/resources"
-        }
-        java {
-            srcDir "../src/main/java"
-        }
-        kotlin {
-            srcDir "../src/main/kotlin"
-        }
-    }
+tasks.named("remapJar") {
+    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-fabric")
+    archiveVersion.set(prop('mod_version', '0.1.0'))
+    archiveClassifier.set("")
+}
+
+tasks.named("build") {
+    dependsOn("remapJar")
 }

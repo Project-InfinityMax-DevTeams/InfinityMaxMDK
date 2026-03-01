@@ -1,18 +1,17 @@
-// MDK用 Root Gradle
-
 plugins {
+    id 'base'
     id 'java'
     id 'eclipse'
     id 'idea'
     id 'org.jetbrains.kotlin.jvm' version '1.9.25' apply false
 }
 
+group = 'com.yuyuto'
+version = '1.0.0'
+
 def prop = { String name, def defaultVal = null ->
     project.hasProperty(name) ? project.property(name) : defaultVal
 }
-
-group = prop('mod_group', 'com.example.examplemod')
-version = prop('mod_version', '1.0.0')
 
 def javaVer = prop('java_version', '17')
 java {
@@ -21,13 +20,7 @@ java {
     }
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-    maven { url 'https://maven.minecraftforge.net/' }
-    maven { url 'https://maven.fabricmc.net/' }
-}
-
+// Subprojects共通設定
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -35,26 +28,21 @@ subprojects {
     group = rootProject.group
     version = rootProject.version
 
-    dependencies {
-        implementation 'org.joml:joml:1.10.5'
-        implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-        implementation "com.yuyuto:infinitymaxapi:0.1.0"
-    }
-
-    def spJavaVer = rootProject.hasProperty('java_version') ? rootProject.property('java_version') : '17'
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(Integer.parseInt(spJavaVer.toString()))
+            languageVersion = JavaLanguageVersion.of(Integer.parseInt(prop('java_version', '17').toString()))
         }
+        withSourcesJar()
     }
+
     kotlin {
-        jvmToolchain(Integer.parseInt(spJavaVer.toString()))
+        jvmToolchain(Integer.parseInt(prop('java_version', '17').toString()))
     }
 
     repositories {
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/Yuyuto000/InfinityMaxAPI")
+            url = uri("https://maven.pkg.github.com/Project-InfinityMax-DevTeams/InfinityMaxAPI")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -63,50 +51,61 @@ subprojects {
         maven { url 'https://maven.fabricmc.net/' }
         maven { url 'https://maven.minecraftforge.net/' }
     }
-}
 
-dependencies {
-    implementation "com.yuyuto:infinitymaxapi:1.0.0"
-}
+    dependencies {
+        implementation 'org.joml:joml:1.10.5'
+        implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+        if (project.name != 'common') {
+            implementation project(':common') 
+            implementation "com.yuyuto:infinitymaxapi:0.1.0"
+        }
+    }
 
-tasks.named('build') {
-    dependsOn(':fabric:build', ':forge:build')
-}
-
-tasks.withType(JavaCompile).configureEach {
-    if (project == rootProject) {
-        enabled = false
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = Integer.parseInt(prop('java_version', '17').toString())
     }
 }
 
+// MOD Artifacts集約
+def artifactOutputDir = layout.buildDirectory.dir("artifacts")
 
-import groovy.json.JsonOutput
+tasks.register("cleanModArtifacts", Delete) {
+    group = "build"
+    description = "Deletes generated Forge/Fabric mod artifacts from the root build directory."
+    delete artifactOutputDir
+}
 
-def registrationSkipHints = [
-        client : 'DedicatedServer向けビルドではクライアント処理を登録しない',
-        gui    : 'サーバー専用構成ではGUI登録を省略',
-        datagen: '通常ランタイムではDataGen登録を実行しない'
-]
+tasks.register("assembleModArtifacts") {
+    group = "build"
+    description = "Builds Forge and Fabric distributable jars and gathers them into build/artifacts/."
 
-tasks.register('generateRegistrationHintsJson') {
-    def outDir = layout.buildDirectory.dir('generated/registration-hints')
-    outputs.dir(outDir)
+    dependsOn(
+            ":forge:jar",
+            ":fabric:remapJar"
+    )
+
     doLast {
-        def dir = outDir.get().asFile
-        dir.mkdirs()
-        def file = new File(dir, 'registration-skip-hints.json')
-        def payload = [
-                modId    : (prop('mod_id', 'examplemod')),
-                generated: new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX"),
-                skip     : registrationSkipHints
-        ]
-        file.text = JsonOutput.prettyPrint(JsonOutput.toJson(payload))
+        def outputDir = artifactOutputDir.get().asFile
+        outputDir.mkdirs()
+
+        copy {
+            from project(":forge").tasks.named("jar").get().archiveFile
+            into outputDir
+        }
+        copy {
+            from project(":fabric").tasks.named("remapJar").get().archiveFile
+            into outputDir
+        }
+
+        logger.lifecycle("Mod artifacts assembled at: ${outputDir}")
     }
 }
 
-subprojects {
-    tasks.matching { it.name == 'processResources' }.configureEach {
-        dependsOn(rootProject.tasks.named('generateRegistrationHintsJson'))
-        from(rootProject.layout.buildDirectory.dir('generated/registration-hints'))
-    }
+tasks.named("clean") { 
+    dependsOn("cleanModArtifacts") 
+}
+
+tasks.named("build") {  
+    dependsOn("assembleModArtifacts") 
 }

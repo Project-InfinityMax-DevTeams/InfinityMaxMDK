@@ -1,29 +1,23 @@
-// forge サブプロジェクトの build.gradle
 plugins {
     id 'net.minecraftforge.gradle' version '6.0.30'
 }
 
-def prop = { String name, def defaultVal = null -> project.hasProperty(name) ? project.property(name) : defaultVal }
+def prop = { String name, def defaultVal = null ->
+    project.hasProperty(name) ? project.property(name) : defaultVal
+}
 
 minecraft {
     mappings channel: 'official', version: prop('minecraft_version', '1.20.1')
 }
 
-
-// Forge 依存
 dependencies {
     def mc = prop('minecraft_version', '1.20.1')
     def fv = prop('forge_version', '47.2.0')
+
     minecraft "net.minecraftforge:forge:${mc}-${fv}"
+    implementation project(":common")
 }
 
-// Java 設定
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-    options.release = (project.hasProperty('java_version') ? project.property('java_version').toInteger() : 17)
-}
-
-// mods.toml 展開
 processResources {
     inputs.property "version", prop('mod_version', '0.1.0')
     filesMatching('META-INF/mods.toml') {
@@ -40,23 +34,17 @@ processResources {
 }
 
 jar {
-    def id = prop('mod_id', 'infinitymaxapi')
-    def ver = prop('mod_version', '0.1.0')
-    archiveBaseName.set(id + "-forge")
-    archiveVersion.set(ver)
+    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-forge")
+    archiveVersion.set(prop('mod_version', '0.1.0'))
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-sourceSets {
-    main{
-        resources {
-            srcDir "../src/main/resources"
-        }
-        java {
-            srcDir "../src/main/java"
-        }
-        kotlin {
-            srcDir "../src/main/kotlin"
-        }
-    }
+tasks.named("jar") {
+    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-forge")
+    archiveVersion.set(prop('mod_version', '0.1.0'))
+    archiveClassifier.set("")
+}
+
+tasks.named("build") {
+    dependsOn("jar")
 }
