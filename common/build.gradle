@@ -21,19 +21,6 @@ kotlin {
     jvmToolchain(prop('java_version', 17).toInteger())
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/Project-InfinityMax-DevTeams/InfinityMaxAPI")
-        credentials {
-            username = System.getenv("GITHUB_USERNAME")  // PAT 用のユーザー名
-            password = System.getenv("GITHUB_TOKEN_READ") // PAT
-        }
-    }
-}
-
-
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'org.joml:joml:1.10.5'
