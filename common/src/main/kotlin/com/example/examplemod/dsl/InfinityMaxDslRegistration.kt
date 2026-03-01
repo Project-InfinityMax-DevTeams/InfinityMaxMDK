@@ -101,9 +101,9 @@ object InfinityMaxDslRegistration {
             packet<Any>("example_packet") {
                 resourceId = "network/example_packet"
                 phase = Phase.RECEIVE
-                connector = BehaviorConnector { ctx ->
-                    ModCommonLogic.onPacketReceived(ctx)
-                }
+                connector = PacketBehaviorConnector<Any> { ctx, packet ->
+							    ModCommonLogic.onPacketReceived(ctx, packet)
+								}
             }
         }
     }
