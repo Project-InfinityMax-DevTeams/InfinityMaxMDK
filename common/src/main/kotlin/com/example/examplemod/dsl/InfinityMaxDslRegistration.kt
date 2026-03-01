@@ -5,6 +5,7 @@ import com.yuyuto.infinitymaxapi.api.libs.Phase
 import com.yuyuto.infinitymaxapi.api.libs.behavior
 import com.yuyuto.infinitymaxapi.api.libs.registry
 import com.yuyuto.infinitymaxapi.api.libs.behavior.BehaviorConnector
+import com.yuyuto.infinitymaxapi.api.libs.behavior.PacketBehaviorConnector
 
 /**
  * InfinityMaxAPI の登録DSL/振る舞いDSLを利用してゲーム要素を登録するクラスです。
