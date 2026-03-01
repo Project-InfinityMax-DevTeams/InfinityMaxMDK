@@ -19,7 +19,7 @@ public final class CommonBootstrap {
      */
     public static void init() {
         // Kotlin 側の登録処理を実行
-        ExampleModKotlinDemo.initializeFromKotlin();
+        InfinityMaxDslRegistrationKt.register();
 
         // 今後ここに共通ロジックを追加できる
         System.out.println("[InfinityMax] Common bootstrap initialized.");
