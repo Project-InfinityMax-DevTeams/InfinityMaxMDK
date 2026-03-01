@@ -4,6 +4,7 @@ import com.example.examplemod.customlogic.ModCommonLogic
 import com.yuyuto.infinitymaxapi.api.libs.Phase
 import com.yuyuto.infinitymaxapi.api.libs.behavior
 import com.yuyuto.infinitymaxapi.api.libs.registry
+import com.yuyuto.infinitymaxapi.api.libs.behavior.BehaviorConnector
 
 /**
  * InfinityMaxAPI の登録DSL/振る舞いDSLを利用してゲーム要素を登録するクラスです。
