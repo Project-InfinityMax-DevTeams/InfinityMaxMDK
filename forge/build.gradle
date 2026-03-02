@@ -26,7 +26,7 @@ processResources {
 }
 
 jar {
-    archiveBaseName.set("${prop('mod_id')}-forge")
-    archiveVersion.set(prop('mod_version'))
+    archiveBaseName.set("${prop('mod_id')}")
+    archiveVersion.set("${prop('mod_version')}-mc${prop('minecraft_version')}-forge")
     archiveClassifier.set("")
 }

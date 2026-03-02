@@ -22,7 +22,7 @@ processResources {
 }
 
 tasks.named("remapJar") {
-    archiveBaseName.set("${prop('mod_id')}-fabric")
-    archiveVersion.set(prop('mod_version'))
+    archiveBaseName.set("${prop('mod_id')}")
+    archiveVersion.set("${prop('mod_version')}-mc${prop('minecraft_version')}-fabric")
     archiveClassifier.set("")
 }
