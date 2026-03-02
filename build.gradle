@@ -36,22 +36,21 @@ subprojects {
         jvmToolchain(prop("java_version") as Integer)
     }
 
-    afterEvaluate { proj ->
-        proj.repositories {
-            mavenCentral()
-            maven {
-                name = "GithubPackages"
-                url = url("https://maven.pkg.github.com/Project-InfinityMax-DevTeams/InfinityMaxAPI")
-                credentials {
-                    username = System.getenv("GITHUB_USERNAME")
-                    password = System.getenv("GPR_TOKEN")
-                }
+    repositories {
+        mavenCentral()
+        maven {
+            name = "GithubPackages"
+            url = url("https://maven.pkg.github.com/Project-InfinityMax-DevTeams/InfinityMaxAPI")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GPR_TOKEN")
             }
-            maven { url 'https://maven.fabricmc.net/' }
-            maven { url 'https://maven.minecraftforge.net/' }
-            maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
         }
+        maven { url 'https://maven.fabricmc.net/' }
+        maven { url 'https://maven.minecraftforge.net/' }
+        maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
     }
+
 
     dependencies {
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib'
