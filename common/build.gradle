@@ -24,7 +24,7 @@ kotlin {
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
     implementation 'org.joml:joml:1.10.5'
-    implementation 'com.yuyuto:infinitymaxapi-common:1.0.0-SNAPSHOT'
+    implementation 'com.yuyuto:infinitymaxapi-common:1.0.0'
 
 }
 
