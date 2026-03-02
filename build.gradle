@@ -37,9 +37,6 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url 'https://maven.fabricmc.net/' }
-        maven { url 'https://maven.minecraftforge.net/' }
-        maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
         maven {
             name = "GithubPackages"
             url = url("https://maven.pkg.github.com/Project-InfinityMax-DevTeams/InfinityMaxAPI")
@@ -48,6 +45,9 @@ subprojects {
                 password = System.getenv("GPR_TOKEN")
             }
         }
+        maven { url 'https://maven.fabricmc.net/' }
+        maven { url 'https://maven.minecraftforge.net/' }
+        maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
     }
 
     dependencies {
