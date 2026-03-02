@@ -6,10 +6,11 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.25' apply false
 }
 
-group = property("maven_group")
-version = property("mod_version")
-
 def prop = { name -> project.property(name) }
+
+group = prop("maven_group")
+version = prop("mod_version")
+
 
 java {
     toolchain {
