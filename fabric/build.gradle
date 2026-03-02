@@ -2,48 +2,27 @@ plugins {
     id 'fabric-loom' version '1.5.6'
 }
 
-def prop = { String name, def defaultVal = null ->
-    project.hasProperty(name) ? project.property(name) : defaultVal
-}
+def prop = { name -> project.property(name) }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${prop('minecraft_version', '1.20.1')}"
-    mappings "net.fabricmc:yarn:${prop('yarn_mappings', '1.20.1+build.3')}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${prop('fabric_loader_version', '0.15.6')}"
+    minecraft "com.mojang:minecraft:${prop('minecraft_version')}"
+    mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${prop('fabric_loader_version')}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${prop('fabric_api_version')}"
 
     implementation project(":common")
-    implementation 'com.yuyuto:infinitymaxapi-common:1.0.0-SNAPSHOT'
+    implementation "com.yuyuto:infinitymaxapi-common:${prop('infinitymaxapi_version')}"
 }
 
-// fabric.mod.json 展開
 processResources {
-    inputs.property "version", prop('mod_version', '0.1.0')
+    inputs.property "version", prop('mod_version')
     filesMatching('fabric.mod.json') {
-        expand(
-            version: prop('mod_version','0.1.0'),
-            mod_id: prop('mod_id', 'infinitymaxmdk'),
-            mod_name: prop('mod_name', 'Your Mod Name'),
-            mod_description: prop('mod_description', ''),
-            mod_authors: prop('mod_authors', ''),
-            mod_license: prop('mod_license', ''),
-            minecraft_version: prop('minecraft_version', '1.20.1')
-        )
+        expand(project.properties)
     }
 }
 
-// Jar 出力設定
-jar {
-    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-fabric")
-    archiveVersion.set(prop('mod_version', '0.1.0'))
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
 tasks.named("remapJar") {
-    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-fabric")
-    archiveVersion.set(prop('mod_version', '0.1.0'))
+    archiveBaseName.set("${prop('mod_id')}-fabric")
+    archiveVersion.set(prop('mod_version'))
     archiveClassifier.set("")
-}
-
-tasks.named("build") {
-    dependsOn("remapJar")
 }

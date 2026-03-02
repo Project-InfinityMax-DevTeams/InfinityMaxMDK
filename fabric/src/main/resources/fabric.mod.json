@@ -1,25 +1,23 @@
 {
   "schemaVersion": 1,
-  "id": "infinitymaxmdk",
-  "version": "${version}",
-  "name": "InfinityMax MDK",
-  "description": "InfinityMax MDK for Fabric.",
-  "authors": [
-    "Yuyuto_Official"
-  ],
-  "contact": {},
-  "license": "MIT",
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "license": "${mod_license}",
   "environment": "*",
-  "depends": {"entrypoints": {
+
+  "entrypoints": {
     "main": [
       "com.example.examplemod.FabricInitializer"
     ]
   },
+
+  "depends": {
     "fabricloader": ">=0.15.0",
     "minecraft": ">=1.20",
-    "fabric-api": "*"
-  },
-  "mixins": [
-    "examplemod.mixins.json"
-  ]
+    "fabric-api": "*",
+    "infinitymaxapi": ">=1.0.0"
+  }
 }

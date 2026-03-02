@@ -2,52 +2,31 @@ plugins {
     id 'net.minecraftforge.gradle' version '6.0.30'
 }
 
-def prop = { String name, def defaultVal = null ->
-    project.hasProperty(name) ? project.property(name) : defaultVal
-}
+def prop = { name -> project.property(name) }
 
 minecraft {
-    mappings channel: 'official', version: prop('minecraft_version', '1.20.1')
+    mappings channel: 'official', version: prop('minecraft_version')
 }
 
 dependencies {
-    def mc = prop('minecraft_version', '1.20.1')
-    def fv = prop('forge_version', '47.2.0')
+    minecraft "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
-    minecraft "net.minecraftforge:forge:${mc}-${fv}"
     implementation project(":common")
-    implementation 'com.yuyuto:infinitymaxapi-common:1.0.0-SNAPSHOT'
-    implementation 'thedarkcolour:kotlinforforge:4.10.0'
 
+    implementation "com.yuyuto:infinitymaxapi-common:${prop('infinitymaxapi_version')}"
+
+    implementation "thedarkcolour:kotlinforforge:${prop('kotlinforforge_version')}"
 }
 
 processResources {
-    inputs.property "version", prop('mod_version', '0.1.0')
+    inputs.property "version", prop('mod_version')
     filesMatching('META-INF/mods.toml') {
-        expand(
-            mod_id: prop('mod_id', 'infinitymaxmdk'),
-            mod_name: prop('mod_name', 'Your Mod Name'),
-            mod_version: prop('mod_version', '0.1.0'),
-            mod_description: prop('mod_description', ''),
-            mod_authors: prop('mod_authors', ''),
-            mod_license: prop('mod_license', ''),
-            minecraft_version: prop('minecraft_version', '1.20.1')
-        )
+        expand(project.properties)
     }
 }
 
 jar {
-    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-forge")
-    archiveVersion.set(prop('mod_version', '0.1.0'))
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.named("jar") {
-    archiveBaseName.set(prop('mod_id', 'infinitymaxmdk') + "-forge")
-    archiveVersion.set(prop('mod_version', '0.1.0'))
+    archiveBaseName.set("${prop('mod_id')}-forge")
+    archiveVersion.set(prop('mod_version'))
     archiveClassifier.set("")
-}
-
-tasks.named("build") {
-    dependsOn("jar")
 }

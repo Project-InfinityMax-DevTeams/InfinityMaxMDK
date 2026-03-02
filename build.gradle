@@ -6,21 +6,17 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.25' apply false
 }
 
-group = 'com.yuyuto'
-version = '1.0.0'
+group = property("maven_group")
+version = property("mod_version")
 
-def prop = { String name, def defaultVal = null ->
-    project.hasProperty(name) ? project.property(name) : defaultVal
-}
+def prop = { name -> project.property(name) }
 
-def javaVer = prop('java_version', '17')
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(Integer.parseInt(javaVer.toString()))
+        languageVersion = JavaLanguageVersion.of(prop("java_version") as Integer)
     }
 }
 
-// Subprojects共通設定
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -30,58 +26,36 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(Integer.parseInt(prop('java_version', '17').toString()))
+            languageVersion = JavaLanguageVersion.of(prop("java_version") as Integer)
         }
         withSourcesJar()
     }
 
     kotlin {
-        jvmToolchain(Integer.parseInt(prop('java_version', '17').toString()))
+        jvmToolchain(prop("java_version") as Integer)
     }
 
     repositories {
         mavenCentral()
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Project-InfinityMax-DevTeams/InfinityMaxAPI")
-            credentials {
-                username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GPR_TOKEN")
-            }
-        }
         maven { url 'https://maven.fabricmc.net/' }
         maven { url 'https://maven.minecraftforge.net/' }
         maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
     }
 
     dependencies {
-        implementation 'org.joml:joml:1.10.5'
         compileOnly 'org.jetbrains.kotlin:kotlin-stdlib'
     }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
-        options.release = Integer.parseInt(prop('java_version', '17').toString())
+        options.release = prop("java_version") as Integer
     }
 }
 
-// MOD Artifacts集約
 def artifactOutputDir = layout.buildDirectory.dir("artifacts")
 
-tasks.register("cleanModArtifacts", Delete) {
-    group = "build"
-    description = "Deletes generated Forge/Fabric mod artifacts from the root build directory."
-    delete artifactOutputDir
-}
-
 tasks.register("assembleModArtifacts") {
-    group = "build"
-    description = "Builds Forge and Fabric distributable jars and gathers them into build/artifacts/."
-
-    dependsOn(
-            ":forge:jar",
-            ":fabric:remapJar"
-    )
+    dependsOn(":forge:jar", ":fabric:remapJar")
 
     doLast {
         def outputDir = artifactOutputDir.get().asFile
@@ -95,15 +69,5 @@ tasks.register("assembleModArtifacts") {
             from project(":fabric").tasks.named("remapJar").get().archiveFile
             into outputDir
         }
-
-        logger.lifecycle("Mod artifacts assembled at: ${outputDir}")
     }
-}
-
-tasks.named("clean") { 
-    dependsOn("cleanModArtifacts") 
-}
-
-tasks.named("build") {  
-    dependsOn("assembleModArtifacts") 
 }
