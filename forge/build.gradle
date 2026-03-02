@@ -17,7 +17,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc}-${fv}"
     implementation project(":common")
     implementation 'com.yuyuto:infinitymaxapi-common:1.0.0-SNAPSHOT'
-    implementation 'thendarkcolour:kotlinforforge:4.10.0'
+    implementation 'thedarkcolour:kotlinforforge:4.10.0'
 
 }
 
