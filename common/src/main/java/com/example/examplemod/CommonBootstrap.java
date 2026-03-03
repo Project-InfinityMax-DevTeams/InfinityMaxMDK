@@ -14,9 +14,10 @@ public final class CommonBootstrap {
     private CommonBootstrap() {}
 
     /**
-     * 共通初期化処理。
+     * 共通の初期化処理を実行する。
      *
-     * Fabric / Forge のどちらからもここを呼び出す。
+     * Kotlin DSL の登録と共通ロジックの初期化を行い、起動ログを出力する。
+     * Fabric および Forge の両方から呼び出せることを想定している。
      */
     public static void init() {
         // Kotlin 側の登録処理を実行

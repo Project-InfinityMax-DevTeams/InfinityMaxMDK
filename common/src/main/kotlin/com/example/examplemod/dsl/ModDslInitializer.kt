@@ -11,9 +11,11 @@ package com.example.examplemod.dsl
 object ModDslInitializer {
 
     /**
-     * 初期化実行。
+     * Kotlin 側のDSL初期化を行い、未対応要素を登録先へ渡す。
      *
-     * @param unsupportedRegistrar DSL未対応要素をローダー実装へ渡す関数
+     * DSL の登録と関連するバインディング処理を実行し、処理できない要素を引数の関数へ渡して登録させます。
+     *
+     * @param unsupportedRegistrar DSLで処理できない要素を受け取り登録するための関数
      */
     fun initialize(unsupportedRegistrar: (ExtraElementDefinition) -> Unit) {
         InfinityMaxDslRegistration.registerWithInfinityMaxDsl()

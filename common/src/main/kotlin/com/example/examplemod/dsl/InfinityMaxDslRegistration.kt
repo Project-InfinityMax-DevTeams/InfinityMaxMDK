@@ -20,7 +20,9 @@ import com.yuyuto.infinitymaxapi.api.libs.packet.PacketDirection
 object InfinityMaxDslRegistration {
 
     /**
-     * InfinityMaxAPI が提供する registry DSL で要素登録を実行します。
+     * InfinityMaxAPI の registry DSL を用いてモッド向けのアイテム、ブロック、ブロックエンティティ、エンティティ、データ生成、パケット、ネットワーク、GUI、ワールドなどの要素を登録します。
+     *
+     * この関数はサンプルのリソース ID やプロパティ（例: スタック数、強度、サイズ、パケット方向、ネットワークプロトコルなど）を指定した登録ブロックを実行します。実際のモッドで使用する際は各要素の識別子やプロパティを必要に応じて置き換えてください。
      */
     fun registerWithInfinityMaxDsl() {
         registry {
