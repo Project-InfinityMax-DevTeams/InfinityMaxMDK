@@ -175,29 +175,29 @@ object InfinityMaxDslRegistration {
                 meta("source", "block_interact")
             }
 
-						event<ModEvent> {
-							  trigger("examplemod:entity_tick")
-								phase = Phase.TICK
-								priority = 0
-								async = false
-								meta("source","entity_tick")
-						}
+			event<ModEvent> {
+				trigger("examplemod:entity_tick")
+				phase = Phase.TICK
+				priority = 0
+				async = false
+				meta("source","entity_tick")
+			}
 
-						event<ModEvent> {
-							  trigger("examplemod:keybind_press")
-								phase = Phase.PRESS
-								priority = 0
-								async = false
-								meta("source","keybind_press")
-						}
+			event<ModEvent> {
+				trigger("examplemod:keybind_press")
+				phase = Phase.PRESS
+				priority = 0
+				async = false
+				meta("source","keybind_press")
+			}
 
-						event<ModEvent> {
-							  trigger("examplemod:ui_render")
-								phase = Phase.RENDER
-								priority = 0
-								async = false
-								meta("source","ui_render")
-						}
+			event<ModEvent> {
+				trigger("examplemod:ui_render")
+				phase = Phase.RENDER
+				priority = 0
+				async = false
+				meta("source","ui_render")
+			}
         }
     }
 }
