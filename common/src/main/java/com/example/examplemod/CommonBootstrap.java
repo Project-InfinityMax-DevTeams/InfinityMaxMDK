@@ -1,6 +1,8 @@
 package com.example.examplemod;
 
 import com.example.examplemod.dsl.InfinityMaxDslRegistration;
+import com.example.examplemod.dsl.ExtraGameElementRegistration;
+
 /**
  * ローダー共通の初期化処理をまとめるクラスです。
  *
