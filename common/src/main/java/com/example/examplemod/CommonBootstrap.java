@@ -24,6 +24,10 @@ public final class CommonBootstrap {
         InfinityMaxDslRegistration.INSTANCE.registerWithInfinityMaxDsl();
         InfinityMaxDslRegistration.INSTANCE.bindBehaviors();
         InfinityMaxDslRegistration.INSTANCE.bindLogic();
+        ExtraGameElementRegistration.INSTANCE.registerUnsupportedElements(definition -> {
+            System.out.println("[InfinityMax] Unsupported element registered: " + definition.getType() + " - " + definition.getId());
+            // TODO: 将来的に Fabric/Forge 固有の登録処理を実装
+        });
         // 今後ここに共通ロジックを追加できる
         System.out.println("[InfinityMax] Common bootstrap initialized.");
     }
