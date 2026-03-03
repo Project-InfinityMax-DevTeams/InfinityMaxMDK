@@ -18,6 +18,7 @@ object ModDslInitializer {
     fun initialize(unsupportedRegistrar: (ExtraElementDefinition) -> Unit) {
         InfinityMaxDslRegistration.registerWithInfinityMaxDsl()
         InfinityMaxDslRegistration.bindBehaviors()
+        InfinityMaxDslRegistration.bindLogic()
         ExtraGameElementRegistration.registerUnsupportedElements(unsupportedRegistrar)
     }
 }

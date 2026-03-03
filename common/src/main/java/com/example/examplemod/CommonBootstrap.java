@@ -22,6 +22,7 @@ public final class CommonBootstrap {
         // Kotlin 側の登録処理を実行
         InfinityMaxDslRegistration.INSTANCE.registerWithInfinityMaxDsl();
         InfinityMaxDslRegistration.INSTANCE.bindBehaviors();
+        InfinityMaxDslRegistration.INSTANCE.bindLogic();
         // 今後ここに共通ロジックを追加できる
         System.out.println("[InfinityMax] Common bootstrap initialized.");
     }
